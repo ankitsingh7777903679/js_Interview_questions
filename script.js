@@ -137,13 +137,79 @@
 // }
 
 // #30 use for..in loop to iterete over an object   and logs its key
-let obj = {
-    name: "a",
-    role: 12,
-    class: "b"
-}
-for (const o in obj) {
-   
-    console.log(o)
-    
-}
+// let obj = {
+//     name: "a",
+//     role: 12,
+//     class: "b"
+// }
+// for (const o in obj) {
+
+//     console.log(o)
+
+// }
+
+
+// level 4
+
+// #31 create top 5 movie movi name and log it
+// let movie = ["q", "r", "n", "t","m"]
+// movie.forEach(function( value){
+//     console.log(value)
+// })
+
+// #32 Find and log second element of array
+// let arr = [23, 45, 64]
+// console.log(arr[1])
+
+// #33 add two new element to the start of an array using .unshift()
+// let arr = [1, 2, 3, 4]
+// arr.unshift(0)
+// arr.unshift(-1)
+// console.log(arr)
+
+
+// #34 remove the last number of an arr and log the updated array
+// let arr = [1, 2, 3,4, 5] 
+// arrlength = arr.length
+// arr.pop(arrlength-1)
+// arr.pop(arrlength-1)
+// console.log(arr)
+
+// #35 use the slice() to extract the first three element of an array.
+// let arr = [1,2,3,4,5]
+// console.log(arr.slice(0, 3))  
+
+// #36 Find the index of a apecific element in an array using .indexOf()
+// let arr  = [2, 5, 1]
+// console.log(arr.indexOf(2))
+
+// #37 Check if a value exists in an array using .include()
+// let arr = [1,2,3,4,5]
+// console.log(arr.includes(7))
+
+// #38 conbine two array [1,2] nad [3,4] in assending order
+// let arr = [1, 2]
+// let arr1 = [3,4]
+// console.log(arr.concat(arr1))
+
+//  # 39 Sort an array of number [3, 5, 2 0] in asceding order
+// let arr = [3, 5, 2, 0]
+// for (let i = 0; i < arr.length - 1; i++) {
+//     for (let j = 0; j < arr.length - i; j++) {
+//         if (arr[j] > arr[j + 1]) {
+//             let temp = arr[j];
+//             arr[j] = arr[j+1]
+//             arr[j+1] = temp
+//         }
+//     }
+// }
+// console.log(arr)
+
+// #40 Write a programe that create a copy of an array without muiting the original
+let arr = [1,2,3,4]
+let arr2 = [...arr]
+arr.forEach(function(val){
+    arr2.push(val)
+})
+arr2.pop()
+console.log(arr2)
