@@ -20,5 +20,8 @@
 // console.error("error")
 
 // Q7 Log the squre of the number 12  to the console
-console.log(12*12) 
-console.log(Math.sqrt(12))
+// console.log(12*12) 
+
+// Q8 Print the type of variable holding the value TRUE
+var a = true
+console.log(typeof(a))
