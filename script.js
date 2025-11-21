@@ -1,10 +1,10 @@
 // Q1 Console your name
-var name = "Myname"
-console.log(name)
+// var name = "Myname"
+// console.log(name)
 
 // Q2 Print the result of 45 * 2 -10
 
-console.log(45 * 2 -10)
+// console.log(45 * 2 -10)
 
 
 
@@ -41,3 +41,6 @@ console.log(45 * 2 -10)
 // if(age > 18) console.log(true)
 //     else console.log(false)
 
+
+// Q10 Log the result of 100 / 0 and observe the output
+console.log(100/0)
