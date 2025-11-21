@@ -206,10 +206,94 @@
 // console.log(arr)
 
 // #40 Write a programe that create a copy of an array without muiting the original
-let arr = [1,2,3,4]
-let arr2 = [...arr]
-arr.forEach(function(val){
-    arr2.push(val)
-})
-arr2.pop()
-console.log(arr2)
+// let arr = [1,2,3,4]
+// let arr2 = [...arr]
+// arr.forEach(function(val){
+//     arr2.push(val)
+// })
+// arr2.pop()
+// console.log(arr2)
+
+// #41 create a fucntion to ckeck if a number even or odd
+// function eodd(num){
+//     if(num%2==0){
+//         console.log(`number is even ${num}`)
+//     }
+//     else{
+//         console.log(`number is odd ${num}`)
+//     }
+// }
+// eodd(3)
+
+// #42 creta a function that caliculates a curcle area rediuse
+
+// function cirsle(radiuse){
+//     console.log(`Area of circleid: ${Math.PI * radiuse * radiuse}`)
+// }
+// cirsle(4)
+
+// #43 write a function that takes an array of number and returns the sum of array
+
+// function sumarray(arr){
+//     let array = arr;
+//     let sum = 0;
+//     array.forEach(e => {
+//         sum += e;
+//     });
+//     return sum;
+// }
+// let arr = [3,5,2,0]
+// console.log(sumarray(arr))
+
+// #44 create a function that takes ckecks if a string start with a specific letter
+
+// function startWith(str, letter) {
+//     if(str[0].toLowerCase() == letter.toLowerCase()){
+//         console.log(true)
+//     }
+//     else{
+//         console.log(false)
+//     }
+// }
+// startWith("ankit", "a")
+
+// #45 write a function to find the maximum number of two numbers
+
+// function max(a,b){
+//     if(a>b) return a
+//     else return b
+// }
+// console.log(max(4,7))
+
+// #46 create a function that takes a number and return its factorial
+
+// function fact(n){
+//     let fact = 1
+//     for(let i=1; i<=n;i++){
+//         fact = fact*i
+//     }return fact
+// }
+// console.log(fact(5))
+
+// #47 write a function that taks a astring and returns it in reverse order
+
+// function reverseStr(str){
+//     return str.split("").reverse().join("")
+// }
+
+// console.log(reverseStr("ankit"))
+
+// #48 create afunction that return a agest number of an array
+
+function maxValr(arr){
+    let temp = 0
+    for (let i = 0; i < arr.length; i++) {
+        if(arr[i]> arr[temp]){
+            temp = i
+            
+        }
+    }
+    return arr[temp]
+}
+let arr = [3,5,2,0]
+console.log(maxValr(arr))
