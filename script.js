@@ -1,3 +1,13 @@
+// Q1 Console your name
+var name = "Myname"
+console.log(name)
+
+// Q2 Print the result of 45 * 2 -10
+
+console.log(45 * 2 -10)
+
+
+
 // Q3 use console.log to display the current year
 
 // let currentYear = new Date();
@@ -27,6 +37,7 @@
 // console.log(typeof(a))
 
 // Q9 Create a variable holding your age and log whether it's grether than 18
-var age = 19
-if(age > 18) console.log(true)
-    else console.log(false)
+// var age = 19
+// if(age > 18) console.log(true)
+//     else console.log(false)
+
