@@ -125,3 +125,25 @@
 //     arr[arr.length -1 - i] = temp
 // }
 // console.log(arr)
+
+
+// #29 write a while loop that logs a 1 to 100 numbers divisible by 5
+// let num = 1
+// while(num < 101){
+//     if(num % 5 == 0){
+//         console.log(num)
+//     }
+//     num++
+// }
+
+// #30 use for..in loop to iterete over an object   and logs its key
+let obj = {
+    name: "a",
+    role: 12,
+    class: "b"
+}
+for (const o in obj) {
+   
+    console.log(o)
+    
+}
