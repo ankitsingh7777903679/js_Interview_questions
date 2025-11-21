@@ -1,3 +1,5 @@
+// Easy 10
+
 // Q1 Console your name
 // var name = "Myname"
 // console.log(name)
@@ -43,4 +45,12 @@
 
 
 // Q10 Log the result of 100 / 0 and observe the output
-console.log(100/0)
+// console.log(100/0)
+
+
+
+// 2. Variable and dataTypes (10 Q)
+
+// Q11 Declare a variable using let and log its value
+let city = "New York";
+console.log(city);
