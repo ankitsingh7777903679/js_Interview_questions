@@ -23,5 +23,10 @@
 // console.log(12*12) 
 
 // Q8 Print the type of variable holding the value TRUE
-var a = true
-console.log(typeof(a))
+// var a = true
+// console.log(typeof(a))
+
+// Q9 Create a variable holding your age and log whether it's grether than 18
+var age = 19
+if(age > 18) console.log(true)
+    else console.log(false)
