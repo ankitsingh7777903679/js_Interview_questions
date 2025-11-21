@@ -10,7 +10,11 @@
 
 
 // Q5 Track the value of variable by logging it before and after updating
-let val = 34
-console.log(val)
-val = 45
-console.log(val)
+// let val = 34
+// console.log(val)
+// val = 45
+// console.log(val)
+
+
+// Q6 Use a sonsole.error() to  simulate  an error message.
+console.error("error")
