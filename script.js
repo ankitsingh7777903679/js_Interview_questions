@@ -52,5 +52,76 @@
 // 2. Variable and dataTypes (10 Q)
 
 // Q11 Declare a variable using let and log its value
-let city = "New York";
-console.log(city);
+// let city = "New York";
+// console.log(city);
+
+// Q12 Create a const to store the value of PI and log it.
+// let pi = Math.PI
+// console.log(pi)
+
+// Q13 Reassign a value of variable u
+
+// Q14/
+// console.log(typeof(null))
+// let n=1
+// let sum = 0
+// while( n <  11){
+//     sum += n
+//     n++
+// }
+// console.log(sum)
+
+//Q 22
+
+// let name = "ankit"
+// for (const n of name) {
+//     console.log(n)
+// }
+
+// Q23
+// for (i = 1; i <= 20; i++) {
+//     if (i % 2 !== 0) {
+//         console.log(i)
+//     }
+
+// }
+
+// Q24
+// let i =5
+// do{
+//     console.log(i)
+//     i--;
+// }
+// while(i>0)
+
+// Q25
+// let fact = 1
+// for(let i=5;i>0;i--){
+//    fact = fact*i
+// }
+// console.log(fact)
+
+
+// Q26
+// let hold = 1
+// for(let i=1;i<=3;i++){
+//     let str = ""
+//     for(let j=1;j<=i;j++){
+//         str += `${hold} `
+//         hold++
+//     }
+//     console.log(str)
+// }
+
+// #28
+// let arr = [1,2,3,4,5]
+// for(let i=arr.length-1;i>=0;i--){
+//     console.log(arr[i])
+// }
+
+// for(let i=0;i< Math.floor(arr.length / 2); i++){
+//     let temp = arr[i]
+//     arr[i] = arr[arr.length -1 - i]
+//     arr[arr.length -1 - i] = temp
+// }
+// console.log(arr)
