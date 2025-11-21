@@ -17,4 +17,8 @@
 
 
 // Q6 Use a sonsole.error() to  simulate  an error message.
-console.error("error")
+// console.error("error")
+
+// Q7 Log the squre of the number 12  to the console
+console.log(12*12) 
+console.log(Math.sqrt(12))
