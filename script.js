@@ -285,15 +285,112 @@
 
 // #48 create afunction that return a agest number of an array
 
-function maxValr(arr){
-    let temp = 0
-    for (let i = 0; i < arr.length; i++) {
-        if(arr[i]> arr[temp]){
-            temp = i
-            
-        }
-    }
-    return arr[temp]
+// function maxValr(arr){
+//     let temp = 0
+//     for (let i = 0; i < arr.length; i++) {
+//         if(arr[i]> arr[temp]){
+//             temp = i
+
+//         }
+//     }
+//     return arr[temp]
+// }
+// let arr = [3,5,2,0]
+// console.log(maxValr(arr))
+
+
+// let name = "ana";
+// function revStr(str){
+//     return str.split("").reverse().join("")
+// }
+
+// let rs = revStr(name);
+
+// if(rs == name){
+//     console.log("is palindrome..")
+// }
+// else{
+//     console.log("is not palindrome")
+// }
+
+// let arr = [12, 34, 2, 45, 3]
+
+// function largNumber() {
+//     let larg = ''
+//     for (let i = 0; i < arr.length; i++) {
+
+//         if (arr[i] > arr[i + 1]) {
+//             larg = arr[i]
+//         }
+//     }
+//     return larg
+// }
+// console.log(largNumber())
+
+
+// let arr = [1,2 ,3]
+//  arr = arr.slice(1)
+// console.log(arr)
+
+// function hii(){
+//     console.log("hii..")
+// }
+
+// console.log(1 + '2');
+
+// let arr = [1,2,3]
+
+// function sum(){
+//     let sum = 0
+//     for (let i = 0; i < arr.length; i++) {
+
+//         sum = sum + arr[i]
+
+//     }
+//     return sum;
+// }
+// console.log(sum(arr))
+
+// function prime(num) {
+//     if (num <= 1) {
+//         console.log("not palindrome")
+//     }
+//     let i = 2
+//     for (i = 2; i < num; i++) {
+//         if (num % i === 0) {
+//             return i = i
+//         }
+//     }
+//     if (i === num) {
+//         console.log("palindrom " + num)
+//     }
+//     else {
+//         console.log("not")
+//     }
+// }
+// prime(4)
+
+
+// function fibo(num){
+//     let a = 0, b = 1, c
+
+//     for (let i = 0; i < num; i++) {
+//         console.log(a)
+//         c = a + b;
+//         a = b
+//         b = c
+        
+//     }
+// }
+// fibo(9)
+
+function fact(num){
+   let factVal = 1
+
+   for (let i = 1; i <= num; i++) {
+    factVal = factVal * i
+    
+   }
+   console.log(factVal)
 }
-let arr = [3,5,2,0]
-console.log(maxValr(arr))
+fact(5)
