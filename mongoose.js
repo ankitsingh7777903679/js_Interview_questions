@@ -1,27 +1,31 @@
 let express = require('express');
 require('dotenv').config()
 let app = express()
-let mongoose = require('mongoose')
-let enquirymodel = require('./models/querymodel')
+let mongoose = require('mongoose');
+const { enquiryInsert } = require('./app/controllers/web/userEnquiryController');
+
 
 app.use(express.json())
 
-app.post('/api/enquire-insert', async (req, res)=>{
+// app.post('/api/enquire-insert', async (req, res)=>{
 
-    let {sName, sEmail, sPhone, sMessage} = req.body
-    let enquiry = new enquirymodel({
-        name: sName,
-        email: sEmail,
-        phone: sPhone,
-        message: sMessage
-    })
+//     let {sName, sEmail, sPhone, sMessage} = req.body
+//     let enquiry = new enquirymodel({
+//         name: sName,
+//         email: sEmail,
+//         phone: sPhone,
+//         message: sMessage
+//     })
 
-    enquiry.save().then(()=>{
-        res.send({status:1,message:"Enquiry inserted successfully"})
-    }).catch((err)=>{
-        res.send({status:0, message:err.message})
-    })
-})
+//     enquiry.save().then(()=>{
+//         res.send({status:1,message:"Enquiry inserted successfully"})
+//     }).catch((err)=>{
+//         res.send({status:0, message:err.message})
+//     })
+// })
+
+app.post('/api/enquire-insert', enquiryInsert)
+
 
 app.get('/api/enquire-list', async (req, res) =>{
     let enquirylist =await enquirymodel.find()
