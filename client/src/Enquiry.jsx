@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss'
 
 export default function Enquiry() {
 
@@ -24,53 +26,64 @@ export default function Enquiry() {
         setFormData(oldData)
     }
 
+
     let saveEnquiry = (e) => {
         e.preventDefault();
-        axios.post(`http://localhost:8000/api/website/enquiry/insert`, formData)
-            .then((res) => {
-                console.log(res.data);
-                if (res.data.status === 1) {
-                    toast.success(res.data.message || "Enquiry submitted successfully!");
-                    setFormData({
-                        name: "",
-                        email: "",
-                        phone: "",
-                        message: ""
-                    });
-                } else {
-                    toast.error(res.data.message || "Failed to submit enquiry");
-                }
-            })
-            .catch((err) => {
-                console.error("Error:", err);
-                toast.error("Failed to submit enquiry: " + (err.response?.data?.message || err.message));
-            });
-    }
-        
-        let enquiryFetch = async () => {
-            let res = await axios.get(`http://localhost:8000/api/website/enquiry/list`);
-            console.log(res.data); // {status: 1, data: Array(10)}
-            if (res.data.status === 1) {
-                        setEnquiries(res.data.data); // Access the array at res.data.data
-            }
-        }
-    
-        useEffect(() => {
-            // axios.get(`http://localhost:8000/api/website/enquiry/list`)
-            //     .then((res) => {
-            //         console.log(res.data); // {status: 1, data: Array(10)}
-            //         if (res.data.status === 1) {
-            //             setEnquiries(res.data.data); // Access the array at res.data.data
-            //         }
-            //     })
-            //     .catch((err) => {
-            //         console.error("Error:", err);
-            //     });
-            enquiryFetch();
-        }, []);
-        useEffect(() => {enquiryFetch();}, [formData]);
 
-      
+        if (formData._id) {
+            axios.put(`http://localhost:8000/api/website/enquiry/update/${formData._id}`, formData)
+                .then((res) => {
+                    console.log(res.data);
+            
+                if (res.data.status === 1) {
+                        toast.success(res.data.message || "Enquiry update successfully!");
+                        setFormData({
+                            name: "",
+                            email: "",
+                            phone: "",
+                            message: "",
+                            _id: ""
+                        });
+                    }
+                    else {
+                        alert(res.data.message || "Failed to update enquiry");
+                    }
+                })
+        }
+        else {
+            axios.post(`http://localhost:8000/api/website/enquiry/insert`, formData)
+                .then((res) => {
+                    console.log(res.data);
+                    if (res.data.status === 1) {
+                        toast.success(res.data.message || "Enquiry submitted successfully!");
+                        setFormData({
+                            name: "",
+                            email: "",
+                            phone: "",
+                            message: "",
+                            _id: ""
+                        });
+                    }
+                })
+
+        }
+
+    }
+
+    let enquiryFetch = async () => {
+        let res = await axios.get(`http://localhost:8000/api/website/enquiry/list`);
+        console.log(res.data); // {status: 1, data: Array(10)}
+        if (res.data.status === 1) {
+            setEnquiries(res.data.data); // Access the array at res.data.data
+        }
+    }
+
+    useEffect(() => {
+        enquiryFetch();
+    }, []);
+    useEffect(() => { enquiryFetch(); }, [formData]);
+
+
 
     return (
         <>
@@ -119,13 +132,15 @@ export default function Enquiry() {
                             <Checkbox id="remember" />
                             <Label htmlFor="remember">Remember me</Label>
                         </div>
-                        <Button type="submit" >Submit</Button>
+                        <Button type="submit" >{
+                            formData._id ? "Update" : "Submit"}
+                        </Button>
 
                     </form>
                 </div>
                 <div className='bg-[#626f85] p-4 rounded '>
                     <h2 className='text-[20px] font-bold'>Enquire List</h2>
-                    <EnquiryList enquiries={enquiries} />
+                    <EnquiryList enquiries={enquiries} enquiryFetch={enquiryFetch} Swal={Swal} formData={formData} setFormData={setFormData} />
                 </div>
             </div>
 
