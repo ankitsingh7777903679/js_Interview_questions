@@ -16,6 +16,12 @@ let enquiryInsert =(req, res) => {
     })
 }
 
-module.exports = {
-    enquiryInsert
+let enquiryList =async (req, res) =>{
+   await enquiryModel.find().then((data)=>{
+        res.send({status:1, data:data})
+    }).catch((err)=>{
+        res.send({status:0, message:err})
+    })
 }
+
+module.exports = {enquiryInsert, enquiryList}
