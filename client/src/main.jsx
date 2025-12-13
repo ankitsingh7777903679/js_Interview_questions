@@ -5,7 +5,7 @@ import App from './App.jsx'
 import Enquiry from './Enquiry.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <Enquiry />
-  </StrictMode>,
+  // </StrictMode>,
 )
