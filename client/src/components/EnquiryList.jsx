@@ -35,12 +35,12 @@ function EnquiryList({enquiries}) {
                                             <TableCell>{enquiry.phone}</TableCell>
                                             <TableCell>{enquiry.message}</TableCell>
                                             <TableCell>
-                                                <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                                                <a href="#" className="font-medium  hover:underline text-white bg-blue-500 px-3 py-2 rounded">
                                                     Edit
                                                 </a>
                                             </TableCell>
                                             <TableCell>
-                                                <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                                                <a href="#" className="font-medium text-primary-600 hover:underline text-white bg-red-500 px-3 py-2 rounded">
                                                     Delete
                                                 </a>
                                             </TableCell>

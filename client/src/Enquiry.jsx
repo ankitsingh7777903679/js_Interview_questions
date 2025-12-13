@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { Button, Checkbox, Label, TextInput, Textarea } from "flowbite-react";
 import EnquiryList from './components/EnquiryList';
 import axios from 'axios';
@@ -7,6 +7,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Enquiry() {
+
+    const [enquiries, setEnquiries] = useState([]);
+
     let [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -43,21 +46,29 @@ export default function Enquiry() {
                 toast.error("Failed to submit enquiry: " + (err.response?.data?.message || err.message));
             });
     }
-
-    const [enquiries, setEnquiries] = useState([]);
+        
+        let enquiryFetch = async () => {
+            let res = await axios.get(`http://localhost:8000/api/website/enquiry/list`);
+            console.log(res.data); // {status: 1, data: Array(10)}
+            if (res.data.status === 1) {
+                        setEnquiries(res.data.data); // Access the array at res.data.data
+            }
+        }
     
         useEffect(() => {
-            axios.get(`http://localhost:8000/api/website/enquiry/list`)
-                .then((res) => {
-                    console.log(res.data); // {status: 1, data: Array(10)}
-                    if (res.data.status === 1) {
-                        setEnquiries(res.data.data); // Access the array at res.data.data
-                    }
-                })
-                .catch((err) => {
-                    console.error("Error:", err);
-                });
+            // axios.get(`http://localhost:8000/api/website/enquiry/list`)
+            //     .then((res) => {
+            //         console.log(res.data); // {status: 1, data: Array(10)}
+            //         if (res.data.status === 1) {
+            //             setEnquiries(res.data.data); // Access the array at res.data.data
+            //         }
+            //     })
+            //     .catch((err) => {
+            //         console.error("Error:", err);
+            //     });
+            enquiryFetch();
         }, []);
+        useEffect(() => {enquiryFetch();}, [formData]);
 
       
 
