@@ -37,5 +37,29 @@ let studentListOne = async(req, res)=>{
     })
 }
 
+let studentUpdate = async(req, res) => {
+    let id = req.params.id;
+    let {name, rollno, email, phone} = req.body;
+    let studentObj ={
+        name, 
+        rollno,
+        email,
+        phone
+    }
+    await studentModel.updateOne({_id: id}, studentObj).then((data)=>{
+        res.send({status:1, message: "update student data", data:data})
+    }).catch((err)=>{
+        res.send({status:0, error: err})
+    })
+}
 
-module.exports = {studentInsert, test, studentList, studentListOne}
+let studentDelete = async(req, res) => {
+    let id = req.params.id;
+    await studentModel.deleteOne({_id: id}).then((data)=>{
+        res.send({status:1, message:"delete student", data: data})
+    }).catch((err)=>{
+        res.send({status:0, error: err})
+    })
+}
+
+module.exports = {studentInsert, test, studentList, studentListOne, studentUpdate, studentDelete}
