@@ -6,12 +6,15 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+.flowbite-react
 node_modules
 dist
 dist-ssr
 *.local
-
+.vscode
+.env
+.env.local
+.env.development.local
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
