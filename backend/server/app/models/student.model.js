@@ -3,24 +3,28 @@ let mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 let studentSchema = new Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    rollno:{
-        type:String,
+    rollno: {
+        type: String,
         required: true
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true
+    email: {
+        type: String,
+        required: true,
+        // unique: true
     },
-    phone:{
-        type:String,
-        required:true
+    phone: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        default: "default"
     }
 })
 
 let studentModel = mongoose.model('student', studentSchema)
-module.exports = {studentModel}
+module.exports = { studentModel }
