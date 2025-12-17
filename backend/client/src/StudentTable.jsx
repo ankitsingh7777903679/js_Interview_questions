@@ -1,102 +1,112 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import { useState } from 'react';
 import SetStudentStatus from './Components/SetStudentStatus';
-// import { set } from 'mongoose';
-function StudentTable({ formSubmit, setFormData, setEditMode, setEditId }) {
-  const tableRows = ["Name", "RollNo", "Email", "Phone", "Delete", "Edit", "Status"];
-  const status = true;
 
+function StudentTable({ setFormData, setStudent, refresh, setRefresh }) {
+  const tableRows = ["Name", "RollNo", "Email", "Phone", "Edit", "Delete", "Status"];
   const [students, setStudents] = useState([])
 
-
-  const fatchStudents = async () => {
-    let res = await axios.get(`http://localhost:8000/api/web/student/list`);
-    // console.log(res.data.data);
-    if (res.data.status === 1) {
-      setStudents(res.data.data)
+  const fetchStudents = async () => {
+    try {
+      let res = await axios.get(`http://localhost:8000/api/web/student/list`);
+      if (res.data.status === 1) {
+        setStudents(res.data.data)
+      }
+    } catch (err) {
+      console.log("Error fetching", err);
     }
   }
+
+  // Reload data when 'refresh' changes
   useEffect(() => {
-    fatchStudents()
-  }, [])
-  useEffect(() => {
-    fatchStudents()
-  }, [formSubmit])
+    fetchStudents()
+  }, [refresh])
 
   const deleteStudent = async (id) => {
-    let res = await axios.delete(`http://localhost:8000/api/web/student/delete/${id}`);
-    console.log(res.data);
-    fatchStudents()
+    if (!window.confirm("Are you sure you want to move this student to Trash?")) return;
 
+    try {
+      // Calls the Soft Delete API
+      let res = await axios.delete(`http://localhost:8000/api/web/student/delete/${id}`);
+      if (res.data.status === 1) {
+        setRefresh(!refresh); // Trigger reload
+      }
+    } catch (err) {
+      console.error("Error deleting student:", err);
+    }
   }
 
-  const editeStudent = (id) => {
-    let studentData = students.find((student) => student._id === id);
-    console.log("Edit Student Data:", studentData);
-    
-    setFormData({
-      name: studentData.name,
-      rollno: studentData.rollno,
-      email: studentData.email,
-      phone: studentData.phone
-    });
-    setEditMode(true);
-    setEditId(id);
+  const editStudent = (studentData) => {
+    setFormData(studentData);
+    setStudent(studentData);
   }
-
 
   return (
-    <div>
-      <div className="overflow-x-auto rounded p-3">
-        <Table className=''>
-          <TableHead className=''>
-            <TableRow>
-              {
-                tableRows.map((row, index) => {
-                  return (
-                    <TableHeadCell key={index} className='py-2 px-4 text-xl text-start'>{row}</TableHeadCell>
-                  )
+    <div className="overflow-x-auto rounded p-3">
+      <Table hoverable>
+        <TableHead>
+          {tableRows.map((row, index) => (
+            <TableHeadCell key={index} className='bg-gray-700 text-white'>{row}</TableHeadCell>
+          ))}
+        </TableHead>
+        <TableBody className="divide-y">
+          {
+            students.map((student, index) => {
+              // LOGIC: If status is 'delete'
+              const isDeleted = student.status === 'delete';
 
-                })
-              }
-            </TableRow>
-          </TableHead>
-          <TableBody className="divide-y w-full">
-            {
-              students.map((student, index) => {
-                return (
-                  <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800 text-start" key={index}>
-                    <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white text-start p-2">
-                      {student.name}
-                    </TableCell>
-                    <TableCell className="text-start">{student.rollno}</TableCell>
-                    <TableCell>{student.email}</TableCell>
-                    <TableCell>{student.phone}</TableCell>
-                    <TableCell>
-                      <a href="#" onClick={() => { editeStudent(student._id) }} className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                        Edit
-                      </a>
-                    </TableCell>
-                    <TableCell>
-                      <a href="#" onClick={() => { deleteStudent(student._id) }} className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                        Delete
+              return (
+                <TableRow
+                  key={index}
+                  className={`bg-white dark:border-gray-700 dark:bg-gray-800 
+                        ${isDeleted ? 'bg-gray-300 opacity-60' : ''}`} // Gray out if deleted
+                >
+                  <TableCell className="font-medium text-white">{student.name}</TableCell>
+                  <TableCell>{student.rollno}</TableCell>
+                  {/* Strike through email if deleted */}
+                  <TableCell className={isDeleted ? 'line-through text-red-700' : ''}>
+                    {student.email}
+                  </TableCell>
+                  <TableCell>{student.phone}</TableCell>
 
-                      </a>
-                    </TableCell>
-                    <TableCell className='bg-none'>
-                      <SetStudentStatus className="bg-red-500" studentStatus={student.status} student={student} fatchStudents={fatchStudents} />
-                    </TableCell>
-                  </TableRow>
-                )
-              })
-            }
+                  {/* EDIT BUTTON */}
+                  <TableCell>
+                    <button
+                      onClick={() => !isDeleted && editStudent(student)}
+                      className={`font-medium ${isDeleted ? 'text-gray-400 cursor-not-allowed' : 'text-blue-600 hover:underline'}`}
+                      disabled={isDeleted}
+                    >
+                      Edit
+                    </button>
+                  </TableCell>
 
+                  {/* DELETE BUTTON */}
+                  <TableCell>
+                    <button
+                      onClick={() => !isDeleted && deleteStudent(student._id)}
+                      className={`font-medium ${isDeleted ? 'text-gray-400 cursor-not-allowed' : 'text-red-600 hover:underline'}`}
+                      disabled={isDeleted}
+                    >
+                      {isDeleted ? 'Deleted' : 'Delete'}
+                    </button>
+                  </TableCell>
 
-          </TableBody>
-        </Table>
-      </div>
+                  {/* STATUS DROPDOWN */}
+                  <TableCell>
+                    <SetStudentStatus
+                      studentStatus={student.status}
+                      student={student}
+                      refresh={refresh}
+                      setRefresh={setRefresh}
+                    />
+                  </TableCell>
+                </TableRow>
+              )
+            })
+          }
+        </TableBody>
+      </Table>
     </div>
   )
 }

@@ -1,69 +1,55 @@
-import React, { useState } from 'react'
-import { Label, Select } from "flowbite-react";
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
+function SetStudentStatus({studentStatus, student, refresh, setRefresh}) {
+    const [statusValue, setStatusValue] = useState(studentStatus || 'pending');
 
-function SetStudentStatus({studentStatus, student, fatchStudents}) {
-    const [studentStatusValue, setStudentsStatusValue] = useState(studentStatus || 'default');
+    useEffect(() => {
+        setStatusValue(studentStatus || 'pending');
+    }, [studentStatus]);
+
     const statusOptions = [
-        { value: 'default', label: 'Default' },
+        { value: 'pending', label: 'Pending' },
         { value: 'active', label: 'Active' },
-        { value: 'deactive', label: 'Deactive' }
+        { value: 'suspend', label: 'Suspend' },
+        { value: 'delete', label: 'Delete' }
     ]
-    // console.log("Current Status:", student?._id);
+
     const getStatusStyle = (status) => {
         switch(status) {
-            case 'active':
-                return 'bg-white text-green-500 border-green-800';
-            case 'deactive':
-                return 'bg-white text-red-500 border-red-300';
-            case 'default':
-                return 'bg-white text-blue-500 border-blue-300';
-            default:
-                return 'bg-white text-blue-500 border-blue-300';
+            case 'active': return 'text-green-600 border-green-600 bg-green-50';
+            case 'suspend': return 'text-orange-500 border-orange-500 bg-orange-50';
+            case 'delete': return 'text-red-600 border-red-600 bg-red-50';
+            case 'pending': return 'text-blue-500 border-blue-500 bg-blue-50';
+            default: return 'text-gray-500 border-gray-500';
         }
     }
 
-    const statusChange = (e) =>{
+    const statusChange = async (e) => {
         let newStatus = e.target.value;
-        console.log("Selected Status:", newStatus);
-        console.log(student?._id);
-        setStudentsStatusValue(newStatus);
-        axios.put(`http://localhost:8000/api/web/student/setStatus/${student?._id}`, {status: newStatus})
-        .then((res)=>{
-            console.log("Status updated successfully:", res.data);
-        })
-        .catch((err)=>{
+        try {
+            await axios.put(`http://localhost:8000/api/web/student/setStatus/${student._id}`, {status: newStatus});
+            setStatusValue(newStatus);
+            setRefresh(!refresh); // Update table immediately
+        } catch(err) {
             console.error("Error updating status:", err);
-        });
-
-        fatchStudents();
-
-
+        }
     }
 
     return (
-       
-            <div className="max-w-md">
-                <select 
-                    id="status" 
-                    required 
-                    value={studentStatusValue}
-                    // onChange={(e) => setStudentsStatusValue(e.target.value)}
-                    onChange={statusChange}
-                    className={`font-medium ${getStatusStyle(studentStatusValue)} rounded text-xl`
-                }
-                >
-                    {statusOptions.map((option) => (
-                        <option key={option.value} value={option.value} onSelect={()=>console.log(option.value)}>
-                            {option.label}
-                        </option>
-                       
-                    ))}
-                    
-                </select>
-            </div>
-     
+        <div className="max-w-md">
+            <select 
+                value={statusValue}
+                onChange={statusChange}
+                className={`font-medium border rounded text-sm p-1 ${getStatusStyle(statusValue)}`}
+            >
+                {statusOptions.map((option) => (
+                    <option key={option.value} value={option.value} className="text-black bg-white">
+                        {option.label}
+                    </option>
+                ))}
+            </select>
+        </div>
     )
 }
 

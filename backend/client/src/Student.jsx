@@ -1,162 +1,142 @@
-import React from 'react'
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import { useState } from 'react';
 import StudentTable from './StudentTable';
 import axios from 'axios';
 
-
 function Student() {
-
+    let [student, setStudent] = useState({}) // Stores current student being edited
+    const [refresh, setRefresh] = useState(false) // Triggers table reload
+    
     const [formData, setFormData] = useState({
         name: '',
         rollno: '',
         email: '',
         phone: ''
     })
+    
     const [errors, setError] = useState({})
-    const [editMode, setEditMode] = useState(false)
-    const [editId, setEditId] = useState(null)
 
     const getValue = (e) => {
         let inputValue = e.target.value;
-        // console.log(inputValue);
         let inputName = e.target.name;
-        // console.log(inputName);
-        let oldData = { ...formData }
-        oldData[inputName] = inputValue;
-        setFormData(oldData)
-        if(errors[inputName]){
-            setError({...errors, [inputName]:''})
+        setFormData({ ...formData, [inputName]: inputValue })
+        
+        // Clear error when typing
+        if (errors[inputName]) {
+            setError({ ...errors, [inputName]: '' })
         }
-
     }
 
     const validateForm = (values) => {
         let error = {}
-        if (!values.name) {
-            error.name = "Name is required"
-        }
+        if (!values.name) error.name = "Name is required";
         if (!values.email) {
-            error.email = "Email is required"
-            // !/\S+@\S+\.com$/.test(values.email)
+            error.email = "Email is required";
         } else if (!/\S+@\S+\.com$/.test(values.email)) {
-            error.email = "Email is invalid"
+            error.email = "Email is invalid";
         }
-        if (!values.rollno) {
-            error.rollno = "Roll Number is required"
-        }
-        if (values.phone.length !== 10) {
-            error.phone = "Phone is required"
-        }
-        else if (!/^[6-9]\d{9}$/.test(values.phone)) {
-            error.phone = "Phone number is invalid"
-        }
+        if (!values.rollno) error.rollno = "Roll Number is required";
+        if (values.phone.length !== 10) error.phone = "Phone must be 10 digits";
+        
         return error;
     }
 
-
     const formSubmit = (e) => {
         e.preventDefault();
-
         const formErrors = validateForm(formData);
         setError(formErrors)
+
         if (Object.keys(formErrors).length === 0) {
-            
-            if(editMode) {
-                updateData();
-            } else {
-                submitData();
-            }
-            
-        }
-        else {
-            // alert(JSON.stringify(formErrors));
+            submitData();
         }
     }
 
     const submitData = async () => {
-        await axios.post(`http://localhost:8000/api/web/student/insert`, formData).then((res) => {
-            console.log(res.data);
-            let data = res.data;
-            if(res.data.status === 1) {
-                alert('Student added successfully!');
-                setFormData({ name: '', rollno: '', email: '', phone: '' });
-            } else {
-                alert(res.data.message || 'Failed to add student');
-            }
-        }).catch((err) => {
-            alert('Error: ' + err.message);
-            
-        });
+        if(student._id){
+            // UPDATE MODE
+            await axios.put(`http://localhost:8000/api/web/student/update/${student._id}`, formData)
+            .then((res) => {
+                if (res.data.status === 1) {
+                    alert('Student updated successfully!');
+                    setStudent({}); // Exit edit mode
+                    setFormData({ name: '', rollno: '', email: '', phone: '' });
+                    setRefresh(!refresh); // Reload Table
+                } else {
+                    alert(res.data.message || 'Error updating student');
+                }
+            }).catch((err) => alert('Error: ' + err.message));
+        } else {
+            // INSERT MODE
+            await axios.post(`http://localhost:8000/api/web/student/insert`, formData)
+            .then((res) => {
+                if (res.data.status === 1) {
+                    alert('Student added successfully!');
+                    setFormData({ name: '', rollno: '', email: '', phone: '' });
+                    setRefresh(!refresh); // Reload Table
+                } else {
+                    // This will show "Email already exists"
+                    alert(res.data.message || 'Error adding student');
+                }
+            }).catch((err) => alert('Error: ' + err.message));
+        }
     }
 
-    const updateData = async () => {
-        await axios.put(`http://localhost:8000/api/web/student/update/${editId}`, formData).then((res) => {
-            console.log(res.data);
-            if(res.data.status === 1) {
-                alert('Student updated successfully!');
-                setFormData({ name: '', rollno: '', email: '', phone: '' });
-                setEditMode(false);
-                setEditId(null);
-            } else {
-                alert(res.data.message || 'Failed to update student');
-            }
-        }).catch((err) => {
-            alert('Error: ' + err.message);
-        });
+    // Cancel Edit Button Logic
+    const cancelEdit = () => {
+        setStudent({});
+        setFormData({ name: '', rollno: '', email: '', phone: '' });
     }
 
     return (
-        <>
-
-            <div className='grid grid-cols-[30%_auto] '>
-                <div className='bg-gray-500 p-4 rounded'>
-                    <h1 className='text-3xl font-bold text-center mb-3'>Student</h1>
-                    <form className="flex max-w-md flex-col gap-4" onSubmit={formSubmit}>
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="name">Your Name</Label>
-                            </div>
-                            <TextInput id="name" type="text" name='name' value={formData.name} onChange={(e) => getValue(e)} placeholder="Your Name" required />
-                             {errors.name && <p className='text-red-500 text-sm mt-1'>{errors.name}</p>}   
-                        </div>
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="rollno">Your Roll Number</Label>
-                            </div>
-                            <TextInput id="rollno" name='rollno' value={formData.rollno} onChange={(e) => getValue(e)} type="number" placeholder="Your Roll Number" required />
-                            {errors.rollno && <p className='text-red-500 text-sm mt-1'>{errors.rollno}</p>} 
-                        </div>
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="email1">Your email</Label>
-                            </div>
-                            <TextInput id="email1" name='email' value={formData.email} onChange={(e) => getValue(e)} type="email" placeholder="name@flowbite.com" required />
-                            {errors.email && <p className='text-red-500 text-sm mt-1'>{errors.email}</p>} 
-                        </div>
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone">Your phone</Label>
-                            </div>
-                            
-                            <TextInput id="phone" name='phone' value={formData.phone} onChange={(e) => getValue(e)} type="number" placeholder="Your phone" required />
-                            {errors.phone && <p className='text-red-500 text-sm mt-1'>{errors.phone}</p>} 
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Checkbox id="remember" />
-                            <Label htmlFor="remember">Remember me</Label>
-                        </div>
-                        <Button type="submit" className="bg-blue-500">{editMode ? 'Update' : 'Submit'}</Button>
-                    </form>
-                </div>
-
-                <div className='bg-[#626f85] p-4 rounded'>
-                    <h2 className='text-[20px] font-bold px-3'>Student List</h2>
-                    <StudentTable formSubmit={formSubmit} setFormData={setFormData} setEditMode={setEditMode} setEditId={setEditId} />
-                </div>
+        <div className='grid grid-cols-[30%_auto] gap-4 p-2'>
+            <div className='bg-gray-500 p-4 rounded h-fit'>
+                <h1 className='text-3xl font-bold text-center mb-3 text-white'>
+                    {student._id ? 'Edit Student' : 'Add Student'}
+                </h1>
+                
+                <form className="flex max-w-md flex-col gap-4" onSubmit={formSubmit}>
+                    <div>
+                        <div className="mb-2 block"><Label htmlFor="name" value="Your Name" className='text-white' /></div>
+                        <TextInput id="name" type="text" name='name' value={formData.name} onChange={getValue} placeholder="Your Name" required />
+                        {errors.name && <p className='text-red-300 text-sm mt-1'>{errors.name}</p>}
+                    </div>
+                    <div>
+                        <div className="mb-2 block"><Label htmlFor="rollno" value="Roll Number" className='text-white' /></div>
+                        <TextInput id="rollno" name='rollno' value={formData.rollno} onChange={getValue} type="number" placeholder="Roll Number" required />
+                        {errors.rollno && <p className='text-red-300 text-sm mt-1'>{errors.rollno}</p>}
+                    </div>
+                    <div>
+                        <div className="mb-2 block"><Label htmlFor="email" value="Email" className='text-white' /></div>
+                        <TextInput id="email" name='email' value={formData.email} onChange={getValue} type="email" placeholder="name@company.com" required />
+                        {errors.email && <p className='text-red-300 text-sm mt-1'>{errors.email}</p>}
+                    </div>
+                    <div>
+                        <div className="mb-2 block"><Label htmlFor="phone" value="Phone" className='text-white' /></div>
+                        <TextInput id="phone" name='phone' value={formData.phone} onChange={getValue} type="number" placeholder="Phone" required />
+                        {errors.phone && <p className='text-red-300 text-sm mt-1'>{errors.phone}</p>}
+                    </div>
+                    
+                    <div className='flex gap-2'>
+                        <Button type="submit" className="bg-blue-600 w-full">
+                            {student._id ? 'Update' : 'Submit'}
+                        </Button>
+                        {student._id && (
+                             <Button type="button" onClick={cancelEdit} className="bg-gray-600 w-full">Cancel</Button>
+                        )}
+                    </div>
+                </form>
             </div>
-        </>
 
+            <div className='bg-[#626f85] p-4 rounded'>
+                <h2 className='text-[20px] font-bold px-3 text-white mb-4'>Student List</h2>
+                <StudentTable 
+                    setFormData={setFormData} 
+                    setStudent={setStudent} 
+                    refresh={refresh} 
+                    setRefresh={setRefresh} 
+                />
+            </div>
+        </div>
     )
 }
 
